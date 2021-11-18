@@ -1,4 +1,5 @@
 import pandas as pd
+from scipy.stats import ttest_ind
 import pandas._testing as tm
 import scipy as sy
 from scipy import stats
@@ -12,31 +13,30 @@ dbdf = pd.read_csv("https://raw.githubusercontent.com/hantswilliams/AHI_DataSci_
 list(dbdf)
 
 timeinhospital = dbdf['time_in_hospital']
-sex = dbdf['gender']
+
+male = dbdf[dbdf['gender'] == 'Male']
+female = dbdf[dbdf['gender'] == 'Female']
+
+ttest_ind(female['time_in_hospital'], male['time_in_hospital'])
+
+#Q1 Since P-value < 0.05 there is a significant difference between days in hospital for each group of men and women.
 
 
-### Q1: Sex or Gender is a nominal category and should be tested with Non-Parametic methods
-sex_stat, sex_p = shapiro(sex)
-print('statistics=%.3f, p=%.3f' % (stat, p))
+caucasian = dbdf[dbdf['race'] == 'Caucasian'] 
+african_American = dbdf[dbdf['race'] == 'AfricanAmerican']
+
+ttest_ind(caucasian['time_in_hospital'], african_American ['time_in_hospital'])
+
+#Q2 There is a significant difference between two leveles(Africanamerican & Caucasian) and the days in hospital.
 
 
-### Q1: P-value for time in hospital is equall to 0.000 which means the null hypothesis is rejected and our distribution 
-### is not normal, and we need to use Non-parametric tests.
+asian = dbdf[dbdf['race'] == 'Asian']
+african_American = dbdf[dbdf['race'] == 'AfricanAmerican']
 
-timeinhospital_stat, timeinhospital_p = shapiro(timeinhospital)
-print('statistics=%.3f, p=%.3f' % (timeinhospital_stat, timeinhospital_p))
- 
-pyplot.hist(timeinhospital).show
+ttest_ind(asian['time_in_hospital'], african_American ['time_in_hospital'])
 
-pearsonr(timeinhospital, sex)
-spearmanr(timeinhospital, sex)
+#Q3 P-value < 0.05 reveals the significant difference between Asian and African American number of days in hospital
 
-
-### Q2
-
-CauAAdf = dbdf['race'] 
-option=['AfricanAmerican', 'Caucasian']
-CauAAdf1 = CauAAdf[CauAAdf['race'].isin(option)]
 
 
 
